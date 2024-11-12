@@ -3,7 +3,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-This is the repository used to notebooks used in kaggle challenges for forecast or advanced analytics 
+This is the repository used to notebooks used in kaggle challenges for regression, classification or other advanced analytics problems 
 
 Each branch will be an individual project with requirements, libs and dependencies;
 

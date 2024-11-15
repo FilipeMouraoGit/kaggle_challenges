@@ -51,10 +51,11 @@ class DataHandler:
                 cluster_data = self.raw_data\
                     .groupby(cluster_columns, as_index=False)\
                     .agg(median_value=(column, 'median'))
-
+                # no transaction in the period, fill with 0
+                cluster_data['median_value'] = cluster_data['median_value'].fillna(0)
                 self.fill_with_cluster_value[column] = cluster_data
                 data = self.raw_data.merge(cluster_data, on=cluster_columns, how='left')
-                self.handler_data[column] = data[column].fillna(data['median'])
+                self.handler_data[column] = data[column].fillna(data['median_value'])
 
         return self.handler_data
 
@@ -84,6 +85,8 @@ class DataHandler:
                     raise ValueError(f'One of the cluster columns is missing in the test data: {cluster_columns}')
                 data = predicted_data.merge(cluster_data, on=cluster_columns, how='left')
                 predicted_data[column] = data[column].fillna(data['median'])
+                # If the median does not exist in the cluster, add as zero since no transaction occurred in the period
+                predicted_data[column] = predicted_data[column].fillna(0)
             else:
                 raise ValueError('Method not supported by the Handler')
         return predicted_data
